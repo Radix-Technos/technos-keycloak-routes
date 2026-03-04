@@ -102,7 +102,7 @@ public class AdminEmailResource {
             FreeMarkerProvider freeMarker = session.getProvider(FreeMarkerProvider.class);
             String htmlBody = freeMarker.processTemplate(
                 attributes,
-                "minor-guardian-verification-email.ftl",
+                "html/minor-guardian-verification-email.ftl",
                 theme
             );
 

@@ -21,7 +21,7 @@
   <p>Prezado(a) responsável,<p>
  
   <p>
-    Este e-mail confirma a autorização para que <strong>${fullName}</strong> utilize o aplicativo [Nome do App].
+    Este e-mail confirma a autorização para que <strong>${fullName}</strong> utilize o aplicativo [Nome do App2].
     Com a sua autorização, todas as funcionalidades do smartwatch e do aplicativo estarão disponíveis para uso,
     sem interrupções. O tratamento dos dados será realizado de forma segura e em conformidade com a
     <strong>Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018)</strong>.
