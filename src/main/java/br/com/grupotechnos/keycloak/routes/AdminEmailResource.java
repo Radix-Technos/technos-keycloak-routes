@@ -3,6 +3,7 @@ package br.com.grupotechnos.keycloak.routes;
 import br.com.grupotechnos.keycloak.routes.models.BasicResponse;
 import br.com.grupotechnos.keycloak.routes.models.GuardianEmailConfirmationActionToken;
 import br.com.grupotechnos.keycloak.routes.models.GuardianVerificationTokenResponse;
+import jakarta.ws.rs.core.UriBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.UserModel;
 
@@ -12,6 +13,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
+import org.keycloak.services.Urls;
 
 import java.time.Instant;
 import java.util.logging.Logger;
@@ -52,7 +54,6 @@ public class AdminEmailResource {
 
         try {
             String token = generateToken(currentUser.getId());
-            logger.info("token " + token);
             return Response.ok(new GuardianVerificationTokenResponse(token)).build();
         } catch (Exception e) {
             logger.info("error " + e);
@@ -64,13 +65,11 @@ public class AdminEmailResource {
     }
 
     private String generateToken(String userId) {
-        long validityInSecs = session.getContext().getRealm().getActionTokenGeneratedByUserLifespan();
-        long absoluteExpirationInSecs = Instant.now().getEpochSecond() + validityInSecs;
+        long absoluteExpirationInSecs = Instant.now().getEpochSecond() + 60*60*24*100;
 
         return new GuardianEmailConfirmationActionToken(
             userId,
-            (int)absoluteExpirationInSecs,
-            "guardian-verification-token-" + userId
+            (int)absoluteExpirationInSecs
         ).serialize(
             session,
             session.getContext().getRealm(),

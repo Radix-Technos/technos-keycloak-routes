@@ -7,9 +7,10 @@ public class GuardianEmailConfirmationActionToken extends DefaultActionToken {
 
     public GuardianEmailConfirmationActionToken(
         String keycloakUserId,
-        int absoluteExpirationInSecs,
-        String authenticationSessionId
+        int absoluteExpirationInSecs
     ) {
-        super(keycloakUserId, TOKEN_TYPE, absoluteExpirationInSecs, null, authenticationSessionId);
+        super(keycloakUserId, TOKEN_TYPE, absoluteExpirationInSecs, null, null);
     }
+
+    private GuardianEmailConfirmationActionToken() {}
 }
