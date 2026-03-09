@@ -16,10 +16,13 @@ import jakarta.ws.rs.core.MediaType;
 import org.keycloak.services.Urls;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 public class AdminEmailResource {
     private static final Logger logger = Logger.getLogger(AdminEmailResource.class.getName());
+
+    public static final String CURRENT_GUARDIAN_VERIFICATION_TOKEN = "currentGuardianVerificationToken";
 
     KeycloakSession session;
 
@@ -54,6 +57,7 @@ public class AdminEmailResource {
 
         try {
             String token = generateToken(currentUser.getId());
+            currentUser.setAttribute(CURRENT_GUARDIAN_VERIFICATION_TOKEN, Collections.singletonList(token));
             return Response.ok(new GuardianVerificationTokenResponse(token)).build();
         } catch (Exception e) {
             logger.info("error " + e);
