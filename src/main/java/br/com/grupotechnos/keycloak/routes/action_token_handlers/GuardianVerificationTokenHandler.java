@@ -15,6 +15,9 @@ import org.keycloak.services.messages.Messages;
 
 import java.util.logging.Logger;
 
+import static br.com.grupotechnos.keycloak.routes.AdminEmailResource.CURRENT_GUARDIAN_VERIFICATION_TOKEN;
+import static br.com.grupotechnos.keycloak.routes.models.MinorVerificationResponse.*;
+
 public class GuardianVerificationTokenHandler extends AbstractActionTokenHandler<GuardianEmailConfirmationActionToken> {
     private static final Logger logger = Logger.getLogger(GuardianVerificationTokenHandler.class.getName());
 
@@ -36,23 +39,28 @@ public class GuardianVerificationTokenHandler extends AbstractActionTokenHandler
 
         UserModel targetUser = session.users().getUserById(realm, userId);
 
-        logger.info("token=" + token);
-        logger.info("userId=" + userId);
-        logger.info("targetUser=" + targetUser);
-
         if (targetUser == null)
-            return Response.status(Response.Status.NOT_FOUND)
-                .header("Access-Control-Allow-Origin", "*")
-                .entity(new BasicResponse("User not found"))
-                .build();
+            return getResponse("", false);
 
-        return Response
-            .ok(new MinorVerificationResponse(targetUser.getEmail()))
-            .build();
+        String savedToken = targetUser.getFirstAttribute(CURRENT_GUARDIAN_VERIFICATION_TOKEN);
+        String providedToken = context.getSession()
+                .getContext()
+                .getHttpRequest()
+                .getUri()
+                .getQueryParameters()
+                .getFirst("key");
+
+        if (savedToken == null || !savedToken.equals(providedToken))
+            return getResponse(targetUser.getEmail(), false);
+
+        targetUser.removeAttribute(CURRENT_GUARDIAN_VERIFICATION_TOKEN);
+
+        return getResponse(targetUser.getEmail(), true);
     }
 
-//    @Override
-//    public String getId() {
-//        return GuardianEmailConfirmationActionToken.TOKEN_TYPE;
-//    }
+    public Response getResponse(String email, boolean validated) {
+        return Response
+            .ok(new MinorVerificationResponse(email, validated))
+            .build();
+    }
 }
