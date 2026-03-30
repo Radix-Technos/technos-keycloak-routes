@@ -56,7 +56,7 @@ public class AdminEmailResource {
         }
 
         try {
-            String token = generateToken(currentUser.getId());
+            String token = generateToken(currentUser);
             currentUser.setAttribute(CURRENT_GUARDIAN_VERIFICATION_TOKEN, Collections.singletonList(token));
             return Response.ok(new GuardianVerificationTokenResponse(token)).build();
         } catch (Exception e) {
@@ -68,12 +68,13 @@ public class AdminEmailResource {
         }
     }
 
-    private String generateToken(String userId) {
+    private String generateToken(UserModel user) {
         long absoluteExpirationInSecs = Instant.now().getEpochSecond() + 60*60*24*100;
 
         return new GuardianEmailConfirmationActionToken(
-            userId,
-            (int)absoluteExpirationInSecs
+            user.getId(),
+            (int)absoluteExpirationInSecs,
+            user.getEmail()
         ).serialize(
             session,
             session.getContext().getRealm(),

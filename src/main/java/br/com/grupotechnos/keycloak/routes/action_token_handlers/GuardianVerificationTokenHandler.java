@@ -1,6 +1,5 @@
 package br.com.grupotechnos.keycloak.routes.action_token_handlers;
 
-import br.com.grupotechnos.keycloak.routes.models.BasicResponse;
 import br.com.grupotechnos.keycloak.routes.models.GuardianEmailConfirmationActionToken;
 import br.com.grupotechnos.keycloak.routes.models.MinorVerificationResponse;
 import jakarta.ws.rs.core.Response;
@@ -16,7 +15,6 @@ import org.keycloak.services.messages.Messages;
 import java.util.logging.Logger;
 
 import static br.com.grupotechnos.keycloak.routes.AdminEmailResource.CURRENT_GUARDIAN_VERIFICATION_TOKEN;
-import static br.com.grupotechnos.keycloak.routes.models.MinorVerificationResponse.*;
 
 public class GuardianVerificationTokenHandler extends AbstractActionTokenHandler<GuardianEmailConfirmationActionToken> {
     private static final Logger logger = Logger.getLogger(GuardianVerificationTokenHandler.class.getName());
