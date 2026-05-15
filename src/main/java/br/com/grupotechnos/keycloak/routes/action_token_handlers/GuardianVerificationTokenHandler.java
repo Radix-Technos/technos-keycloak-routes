@@ -5,12 +5,14 @@ import br.com.grupotechnos.keycloak.routes.models.MinorVerificationResponse;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.authentication.actiontoken.AbstractActionTokenHandler;
 import org.keycloak.authentication.actiontoken.ActionTokenContext;
+import org.keycloak.common.VerificationException;
 import org.keycloak.events.Errors;
 import org.keycloak.events.EventType;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.services.messages.Messages;
+import org.keycloak.sessions.AuthenticationSessionModel;
 
 import java.util.logging.Logger;
 
@@ -27,6 +29,14 @@ public class GuardianVerificationTokenHandler extends AbstractActionTokenHandler
             EventType.EXECUTE_ACTION_TOKEN,
             Errors.INVALID_REQUEST
         );
+    }
+
+    @Override
+    public AuthenticationSessionModel startFreshAuthenticationSession(
+        GuardianEmailConfirmationActionToken token,
+        ActionTokenContext<GuardianEmailConfirmationActionToken> context
+    ) {
+        return context.createAuthenticationSessionForClient("account-console");
     }
 
     @Override
